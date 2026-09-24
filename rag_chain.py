@@ -25,19 +25,12 @@ load_dotenv()
 
 VECTORSTORE_DIR = "vectorstore"
 
-# ---------------------------------------------------------------------------
-# 1. State: the data that flows between nodes in the graph
-# ---------------------------------------------------------------------------
 class RAGState(TypedDict):
     question: str
-    context: List[str]      # retrieved chunk texts
-    sources: List[str]      # where each chunk came from (page/file), for citations
+    context: List[str]      
+    sources: List[str]     
     answer: str
 
-
-# ---------------------------------------------------------------------------
-# 2. Load the retriever (built once, reused across queries)
-# ---------------------------------------------------------------------------
 def load_retriever(persist_dir: str = VECTORSTORE_DIR, k: int = 3):
     embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
     vectorstore = FAISS.load_local(
@@ -82,9 +75,7 @@ Answer:"""
 )
 
 
-# ---------------------------------------------------------------------------
-# 3. Graph nodes
-# ---------------------------------------------------------------------------
+
 def retrieve_node(state: RAGState) -> RAGState:
     """Embed the question (implicitly, via the retriever) and fetch top-k chunks."""
     docs = get_retriever().invoke(state["question"])
@@ -110,9 +101,6 @@ def generate_node(state: RAGState) -> RAGState:
     return {**state, "answer": response.content}
 
 
-# ---------------------------------------------------------------------------
-# 4. Build and compile the graph
-# ---------------------------------------------------------------------------
 def build_graph():
     graph = StateGraph(RAGState)
 
