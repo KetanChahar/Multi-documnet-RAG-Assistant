@@ -4,13 +4,6 @@ eval.py
 Evaluates RETRIEVAL quality (and optionally GENERATION quality) for your multi-document
 RAG pipeline across all ingested documents in the vectorstore.
 
-Documents Evaluated:
-- employee_handbook.txt (HR policies, working hours, benefits, PTO, leave)
-- it_policy.txt (security, passwords, device encryption, VPN, incident reporting)
-- engineering_guide.txt (PR reviews, testing coverage, deployments, on-call, tech stack)
-- financial_report.txt (revenue, net profit, segment breakdown, cash position, metrics)
-- policy.txt (customer privacy, GDPR rights, retention periods, international transfers)
-
 Key Metrics Reported:
 1. Hit Rate@k: Percentage of queries where at least one chunk from the expected
    document appears in the top-k retrieved results.
@@ -44,13 +37,9 @@ import sys
 from collections import defaultdict
 from rag_chain import load_retriever, VECTORSTORE_DIR
 
-# ---------------------------------------------------------------------------
-# Comprehensive Multi-Document Evaluation Set
-# ---------------------------------------------------------------------------
+
 EVAL_SET = [
-    # =======================================================================
-    # 1. EMPLOYEE HANDBOOK (HR, PTO, Benefits, Hours)
-    # =======================================================================
+      """Evaluation set conataining questions for testing basic retrieval . Below are some examples you can use as refrence."""
     {
         "question": "How many days of paid time off (PTO) do employees get per year, and how much can be carried over?",
         "expected_sources": ["employee_handbook.txt"],
@@ -72,9 +61,6 @@ EVAL_SET = [
         "expected_keywords": ["6%", "1,500", "retirement"],
     },
 
-    # =======================================================================
-    # 2. IT SECURITY POLICY (Passwords, Devices, VPN, Incident Reporting)
-    # =======================================================================
     {
         "question": "What are the password requirements and how often must passwords be changed?",
         "expected_sources": ["it_policy.txt"],
@@ -95,10 +81,6 @@ EVAL_SET = [
         "expected_sources": ["it_policy.txt"],
         "expected_keywords": ["crowdstrike falcon", "full-disk encryption"],
     },
-
-    # =======================================================================
-    # 3. ENGINEERING PRACTICES GUIDE (Code Reviews, CI/CD, On-Call, Tech Stack)
-    # =======================================================================
     {
         "question": "How many reviewer approvals are required for a pull request and what is the target size limit?",
         "expected_sources": ["engineering_guide.txt"],
@@ -124,10 +106,6 @@ EVAL_SET = [
         "expected_sources": ["engineering_guide.txt"],
         "expected_keywords": ["python", "fastapi", "postgresql", "redis", "kafka"],
     },
-
-    # =======================================================================
-    # 4. FINANCIAL REPORT Q3 FY2026 (Revenue, Profit, Margins, Cash Position)
-    # =======================================================================
     {
         "question": "What was NovaTech's total revenue, net profit, and YoY revenue growth in Q3 FY2026?",
         "expected_sources": ["financial_report.txt"],
@@ -149,9 +127,6 @@ EVAL_SET = [
         "expected_keywords": ["2.1%", "118%", "churn"],
     },
 
-    # =======================================================================
-    # 5. PRIVACY POLICY (GDPR, Data Retention, International Transfers)
-    # =======================================================================
     {
         "question": "How long are transaction records retained for legal, tax, and accounting requirements?",
         "expected_sources": ["policy.txt"],
@@ -168,9 +143,9 @@ EVAL_SET = [
         "expected_keywords": ["under 13", "knowingly collect"],
     },
 
-    # =======================================================================
+
     # 6. NEGATIVE / OUT-OF-SCOPE QUERIES (Should NOT match any corporate document)
-    # =======================================================================
+
     {
         "question": "What is the warranty and return policy for purchasing a replacement laptop battery?",
         "expected_sources": [],
@@ -190,11 +165,8 @@ EVAL_SET = [
 
 STANDARD_EVAL_SET = EVAL_SET
 
-# ---------------------------------------------------------------------------
-# Hard / Adversarial Evaluation Set: Cross-Document Competition & Paraphrasing
-# ---------------------------------------------------------------------------
 HARD_EVAL_SET = [
-    # --- Cross-Document Ambiguity / Competition ---
+    """An example of a set to check Cross-Document Ambiguity && Zero-Keyword Queries to help you know how well your retrieval perfomes for such question."""
     {
         "question": "How fast do we have to respond to an incident?",
         "expected_sources": ["it_policy.txt"],
