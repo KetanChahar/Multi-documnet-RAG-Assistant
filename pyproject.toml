@@ -1,0 +1,32 @@
+[project]
+name = "multi-doc-rag-assistant"
+version = "0.1.0"
+description = "Multi-document RAG assistant with grounded, cited answers and a built-in retrieval evaluation suite — LangChain, LangGraph, FAISS, Streamlit."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Ketan Chahar" }
+]
+
+dependencies = [
+    "langchain",
+    "langchain-community",
+    "langchain-google-genai",
+    "langchain-groq",
+    "langgraph",
+    "faiss-cpu",
+    "pypdf",
+    "streamlit",
+    "python-dotenv",
+]
+
+[project.urls]
+Repository = "https://github.com/<your-username>/multi-doc-rag-assistant"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["ingest", "rag_chain", "app", "eval"]
