@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/<your-username>/multi-doc-rag-assistant"
+Repository = "https://github.com/KetanChahar/multi-doc-rag-assistant"
 
 [build-system]
 requires = ["setuptools>=68"]
